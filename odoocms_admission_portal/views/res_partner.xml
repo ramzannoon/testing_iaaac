@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_form_id_inherited" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="website" position="before">
+                <field name="email"/>
+                <field name="mobile"/>
+            </field>
+
+            <xpath expr="//notebook/page[@name='sales_purchases']/group[@name='container_row_2']">
+                <group name="Student_info" string="Student">
+                    <field name="is_student"/>
+                    <field name="program_id" attrs="{'invisible': [('is_student','=',False)]}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

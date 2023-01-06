@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="consumption_request_recs" name="Consumption Form">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container">
+                    <div id="top_bar">
+                        <ul id="breadcrumbs">
+                            <li>
+                                <a href="/employee/dashboard">
+                                    <i class="material-icons">Home</i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <center>
+                        <h3>Consumption Request</h3>
+                    </center>
+                    <br/>
+
+                    <div class="container" style="text-align:center">
+                        <div class="row" style="text-align:center">
+                            <center>
+                                <a t-attf-href="/purchase/consumption/form">
+                                    <div style="width: 200px;" class="s_website_form_label"/>
+                                    <button type="button" class="btn btn-primary btn-md o_website_form_send">
+                                        Consumption Request Form
+                                    </button>
+                                </a>
+                            </center>
+
+                        </div>
+                    </div>
+
+                    <table class="table-striped table">
+                        <thead style="font-size: 14px;">
+                            <tr>
+                                <h6>
+                                    <b>
+                                        <th>Number</th>
+                                        <th>Employee</th>
+                                        <th>Department</th>
+                                        <th>Requisition Date</th>
+                                        <th>State</th>
+                                    </b>
+                                </h6>
+                            </tr>
+                        </thead>
+                        <t t-foreach="request.env['internal.transfer.requisition'].sudo().search([('employee_id','=',request.env.user.employee_id.id)])"
+                           t-as="purchase">
+                            <tr>
+                                <td>
+                                    <span t-esc="purchase.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="purchase.employee_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="purchase.department_id.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="purchase.request_date"/>
+                                </td>
+                                <td>
+                                    <span t-field="purchase.state"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                </div>
+            </div>
+        </t>
+        <style>body{ background: #e1e4f0; font-family: 'Open Sans', sans-serif; } .search { width: 100%; position:
+            relative; display: flex; }
+            .searchTerm { width: 100%; border: 2px solid #e1e4f0; border-right: none; padding: 5px; height: 36px;
+            border-radius: 5px 0 0 5px; outline: none; color: #112031; } .searchTerm:focus{ color: #e1e4f0; }
+            .searchButton { width: 40px; height: 36px; border: 1px solid #112031; background: #112031; text-align:
+            center; color: #fff; border-radius: 0 5px 5px 0; cursor: pointer; font-size: 20px; } /*Resize the wrap to
+            see the search bar change!*/ .wrap{ width: 30%; position: absolute; top: 30%; left: 50%; transform:
+            translate(-50%, -50%); } h1 { color: #e1e4f0; font-family: 'Droid serif', serif; font-size: 36px;
+            font-weight: 400; font-style: italic; line-height: 44px; margin: 10px 0 12px; text-align: center; border:
+            1px solid #1e3d75; padding: 20px; background-color: #1a3399; }
+        </style>
+    </template>
+
+    <template id="consumption_request_form_template">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div id="top_bar">
+                        <ul id="breadcrumbs">
+                            <li>
+                                <a href="/employee/dashboard">
+                                    <i class="material-icons">Home</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+<!--                    <form action="/purchase/consumption/form/submit">-->
+                        <center>
+                            <h1>Consumption Request</h1>
+                        </center>
+                        <br></br>
+                        <div class="container">
+                            <div id="top_bar">
+                                <a t-attf-href="/purchase/consumption/recs" role="button">
+                                    <button type="submit" class="btn btn-default btn-primary mb32 a-submit">
+                                        Submit
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+
+                        <t t-if="material=='0'">
+                            <form action="/consumption/request/line/new">
+                                <t t-if="material!='0'">
+                                    <input id='purchase_hid' type="hidden" class="form-control s_website_form_input"
+                                           name="purchase_hid"
+                                           t-att-value='material.id'/>
+                                </t>
+                                <t t-if="material=='0'">
+                                    <input id='purchase_hid' type="hidden" class="form-control s_website_form_input"
+                                           name="purchase_hid"
+                                           value='0'/>
+                                </t>
+
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                    <div class="form-group col-12 s_website_form_field s_website_form_required">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label"
+                                                   style="width: 100px">
+                                                <span class="s_website_form_label_content">Product</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select name="product_id"
+                                                        t-attf-class="form-control s_website_form_input"
+                                                        id="product_id">
+                                                    <t t-foreach="product_id" t-as="product">
+                                                        <option t-att-value="product.id"
+                                                                selected="true">
+                                                            <span t-esc="product.name"/>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+
+                                            <label class="col-form-label col-sm-auto s_website_form_label"
+                                                   style="width: 100px">
+                                                <span class="s_website_form_label_content">Quantity</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                 <input type="text" class="form-control" name="qty"
+                                                       id="qty"
+                                                       required="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <div class="form-group"
+                                     data-type="text" data-name="Field">
+                                    <label for="name">Note :</label>
+                                    <textarea class="form-control s_website_form_input"
+                                              id="description" name="description" type="text"/>
+                                </div>
+                                <div class="container">
+                                    <div id="top_bar">
+                                        <a t-attf-href="/consumption/request/add_line/new" role="button">
+                                            <button type="submit" class="btn btn-default btn-primary mb32 a-submit">
+                                                Add a line
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </t>
+
+                        <t t-if="material!='0'">
+                            <form action="/consumption/request/add_line/new">
+                                <t t-if="material!='0'">
+                                    <input id='purchase_hid' type="hidden" class="form-control s_website_form_input"
+                                           name="purchase_hid"
+                                           t-att-value='material.id'/>
+                                </t>
+                                <t t-if="material=='0'">
+                                    <input id='purchase_hid' type="hidden" class="form-control s_website_form_input"
+                                           name="purchase_hid"
+                                           value='0'/>
+                                </t>
+
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                    <div class="form-group col-12 s_website_form_field s_website_form_required">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label"
+                                                   style="width: 100px">
+                                                <span class="s_website_form_label_content">Product</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <select name="product_id"
+                                                        t-attf-class="form-control s_website_form_input"
+                                                        id="product_id">
+                                                    <t t-foreach="product_id" t-as="product">
+                                                        <option t-att-value="product.id"
+                                                                selected="true">
+                                                            <span t-esc="product.name"/>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+                                            <label class="col-form-label col-sm-auto s_website_form_label"
+                                                   style="width: 100px">
+                                                <span class="s_website_form_label_content">Quantity</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input type="text" class="form-control" name="qty"
+                                                       id="qty"
+                                                       required="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <div class="form-group"
+                                     data-type="text" data-name="Field">
+                                    <label for="name">Note :</label>
+                                    <textarea class="form-control s_website_form_input"
+                                              id="description" name="description" type="text"/>
+                                </div>
+                                <div class="container">
+                                    <div id="top_bar">
+                                        <a t-attf-href="/consumption/request/add_line/new" role="button">
+                                            <button type="submit" class="btn btn-default btn-primary mb32 a-submit">
+                                                Add a line
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </t>
+
+                        <!--                          <table class="uk-table uk-table-nowrap table_check">-->
+                        <!--                                        <thead class="md-bg-blue-grey-700 ">-->
+                        <!--                                            <tr>-->
+                        <!--                                                <th class="uk-width-1-10 md-color-grey-50 ">Reference No</th>-->
+
+                        <div>
+                            <table class="table-striped table">
+                                <thead class="md-bg-blue-grey-700 ">
+                                    <tr style='background-color:#1a3399; color:white;'>
+                                        <h6>
+                                            <b>
+                                                <th>Product</th>
+                                                <th>Unit</th>
+                                                <th>Description</th>
+                                            </b>
+                                        </h6>
+                                    </tr>
+                                </thead>
+                                <t t-if="material !='0'">
+<!--                                material.-->
+                                    <t t-foreach="material.internal_transfer_req_ids" t-as="purchase">
+                                        <tr>
+                                            <td>
+                                                <span t-esc="purchase.product_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="purchase.qty"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="purchase.description"/>
+                                            </td>
+
+                                        </tr>
+                                    </t>
+                                </t>
+                            </table>
+                        </div>
+
+<!--                    </form>-->
+                </div>
+            </div>
+        </t>
+        <style>body{ background: #e1e4f0; font-family: 'Open Sans', sans-serif; } .search { width: 100%; position:
+            relative; display: flex; }
+            .searchTerm { width: 100%; border: 2px solid #e1e4f0; border-right: none; padding: 5px; height: 36px;
+            border-radius: 5px 0 0 5px; outline: none; color: #112031; } .searchTerm:focus{ color: #e1e4f0; }
+            .searchButton { width: 40px; height: 36px; border: 1px solid #112031; background: #112031; text-align:
+            center; color: #fff; border-radius: 0 5px 5px 0; cursor: pointer; font-size: 20px; } /*Resize the wrap to
+            see the search bar change!*/ .wrap{ width: 30%; position: absolute; top: 30%; left: 50%; transform:
+            translate(-50%, -50%); } h1 { color: #e1e4f0; font-family: 'Droid serif', serif; font-size: 36px;
+            font-weight: 400; font-style: italic; line-height: 44px; margin: 10px 0 12px; text-align: center; border:
+            1px solid #1e3d75; padding: 20px; background-color: #1a3399; }
+        </style>
+    </template>
+
+    <template id="purchase_consumption_form_submit" name="purchase Successfully Submitted">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <div class="col-md-12">
+                        <div class="alert alert-success">
+                            Consumption Request Created Successfully.
+                        </div>
+                    </div>
+                </div>
+                <center>
+                    <a t-attf-href="/purchase/consumption/form">
+                        <button type="submit" class="btn btn-default btn-primary mb32 a-submit">
+                            Back
+                        </button>
+                    </a>
+                    <br></br>
+                </center>
+            </div>
+        </t>
+        <style>body{ background: #e1e4f0; font-family: 'Open Sans', sans-serif; } .search { width: 100%; position:
+            relative; display: flex; }
+            .searchTerm { width: 100%; border: 2px solid #e1e4f0; border-right: none; padding: 5px; height: 36px;
+            border-radius: 5px 0 0 5px; outline: none; color: #112031; } .searchTerm:focus{ color: #e1e4f0; }
+            .searchButton { width: 40px; height: 36px; border: 1px solid #112031; background: #112031; text-align:
+            center; color: #fff; border-radius: 0 5px 5px 0; cursor: pointer; font-size: 20px; } /*Resize the wrap to
+            see the search bar change!*/ .wrap{ width: 30%; position: absolute; top: 30%; left: 50%; transform:
+            translate(-50%, -50%); } h1 { color: #e1e4f0; font-family: 'Droid serif', serif; font-size: 36px;
+            font-weight: 400; font-style: italic; line-height: 44px; margin: 10px 0 12px; text-align: center; border:
+            1px solid #1e3d75; padding: 20px; background-color: #1a3399; }
+        </style>
+    </template>
+
+</odoo>

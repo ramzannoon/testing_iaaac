@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="product_issuance_report" inherit_id="stock.report_picking">
+        <xpath expr="//div[@class='row justify-content-end mb16']" position="replace">
+            <center> <div style="text-align=center"><h4>Product Issuance Report</h4></div></center>
+            <br></br>
+        </xpath>
+
+        <xpath expr="//div[@class='row mt48 mb32']" position="before">
+            <div class="row">
+                <div class="col-12">
+                    <table>
+                        <tr>
+                            <th style="width:30%">Employee : </th>
+                            <td style="width:70%"><span><t t-esc="o.partner_id.name"/></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </xpath>
+
+        <xpath expr="//p[2]" position="after">
+            <table style="width:100%; margin-top:95px">
+                <tr>
+                    <th style="width:20%; border-top:1px solid black">
+                        <span>Receiver Signature</span>
+                    </th>
+                    <th style="width:80%"></th>
+                </tr>
+            </table>
+        </xpath>
+    </template>
+
+
+</odoo>
